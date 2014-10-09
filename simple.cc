@@ -1,6 +1,8 @@
 /* Simple simulator for Chutes and Ladders. */
 
 #include <map>
+#include <vector>
+#include <algorithm>
 #include <iostream>
 #include <ostream>
 #include <random>
@@ -38,9 +40,12 @@ void initializeJumpTable() {
   return;
 }
 
+const int iterationCount = 100000000;
+
 int main(void) {
 
   /* Random number code based on cppreference.com example. */
+  std::vector<int> turnList;
   std::random_device rd;
   std::mt19937 gen(rd());
   std::uniform_int_distribution<> dis(1,6);
@@ -51,28 +56,42 @@ int main(void) {
   int steps = 0;
   int newLoc = 0;
   int roll = 0;
-  for(;;) {
-    ++steps;
-    roll = 0;
-    roll = dis(gen);
-    /* Must land on 100 exactly. */
-    if((currLoc + roll) > 100) {
-      continue;
-    } else if((currLoc + roll) == 100) {
-      break;
-    } else {
-      currLoc += roll;
-      newLoc = 0;
-      try {
-	newLoc = jumpTable.at(currLoc);
-	currLoc = newLoc;
-      } 
-      catch(...) {
+
+  unsigned long int sum = 0;
+
+  for(int i = 0; i < iterationCount; ++i) {
+    currLoc = steps = newLoc = roll = 0;
+    for(;;) {
+      ++steps;
+      roll = 0;
+      roll = dis(gen);
+      /* Must land on 100 exactly. */
+      if((currLoc + roll) > 100) {
 	continue;
-      }
-    }
-  }
-  std::cout << "Number of turns = " << steps << std::endl;
+      } else if((currLoc + roll) == 100) {
+	break;
+      } else {
+	currLoc += roll;
+	newLoc = 0;
+	try {
+	  newLoc = jumpTable.at(currLoc);
+	  currLoc = newLoc;
+	} 
+	catch(...) {
+	  continue;
+	}
+      } /* if */
+    } /* for(;;) */
+    turnList.push_back(steps);
+  } /* for(int i) */
+  std::sort(turnList.begin(),turnList.end());
+  std::cout << "Smallest turn count = " << turnList[0] << std::endl;
+  std::cout << "Average turn count = " 
+	    << (std::accumulate(turnList.begin(),
+				turnList.end(),
+				0) / turnList.size()) 
+	    << std::endl;
+  
   return 0;
 }
 
