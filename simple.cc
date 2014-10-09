@@ -43,7 +43,7 @@ int main(void) {
   /* Random number code based on cppreference.com example. */
   std::random_device rd;
   std::mt19937 gen(rd());
-  std::uniform_distribution<> dis(1,6);
+  std::uniform_int_distribution<> dis(1,6);
   /* Now can call dis(gen) to get a dice roll */
 
   /* Basic game loop. */
@@ -64,12 +64,12 @@ int main(void) {
       currLoc += roll;
       newLoc = 0;
       try {
-	newLoc = jumpTable[currLoc];
+	newLoc = jumpTable.at(currLoc);
+	currLoc = newLoc;
       } 
       catch(...) {
 	continue;
       }
-      currLoc = newLoc;
     }
   }
   std::cout << "Number of turns = " << steps << std::endl;
