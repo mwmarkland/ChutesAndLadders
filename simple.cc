@@ -40,7 +40,7 @@ void initializeJumpTable() {
   return;
 }
 
-const int iterationCount = 100000000;
+const int iterationCount = 1000000;
 
 int main(void) {
 
