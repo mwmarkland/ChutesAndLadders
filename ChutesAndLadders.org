@@ -1,0 +1,6 @@
+* References
+  [[https://en.wikipedia.org/wiki/Snakes_and_Ladders][Wikipedia: Snakes and Ladders]]
+  [[http://www.datagenetics.com/blog/november12011/index.html][Analysis of Chutes and Ladders]]
+
+* Etudes
+  [[http://programmingpraxis.com/2011/03/04/chutes-and-ladders/][Programming Praxis: Chutes and Ladders]]
