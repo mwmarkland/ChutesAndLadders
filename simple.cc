@@ -45,7 +45,7 @@ void initializeJumpTable() {
   return;
 }
 
-const int iterationCount = 100;
+const int iterationCount = 100000;
 
 int main(void) {
 
@@ -71,21 +71,25 @@ int main(void) {
       ++steps;
       roll = 0;
       roll = dis(gen);
+#if DEBUG_ME
       std::cout << "current: " << currLoc << std::endl;
       std::cout << "roll: " << roll << std::endl;
-      /* Must land on 100 exactly. */
+#endif /* DEBUG_ME */
       if((currLoc == 100) || ((currLoc + roll) == 100)) {
 	break;
       } else if((currLoc + roll) > 100) {
+	/* Must land on 100 exactly. */
 	continue;
       } else {
 	currLoc += roll;
 	newLoc = 0;
 	newLoc = jumpTable.at(currLoc);
 	if(newLoc != 0) {
+#if DEBUG_ME
 	  std::cout << "Hit in jumpTable: " << newLoc << std::endl;
+#endif /* DEBUG_ME */
 	  currLoc = newLoc;
-	}
+	} /* if */
       } /* if */
     } /* for(;;) */
     turnList.push_back(steps);
