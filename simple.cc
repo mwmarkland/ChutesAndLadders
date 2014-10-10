@@ -14,6 +14,11 @@ map<int,int> jumpTable;
 
 void initializeJumpTable() {
 
+  /* Initialize. */
+  for(int i = 1; i <= 100; ++i) {
+    jumpTable[i] = 0;
+  }
+
   /* Ladders. */
   jumpTable[1] = 38;
   jumpTable[4] = 14;
@@ -40,10 +45,11 @@ void initializeJumpTable() {
   return;
 }
 
-const int iterationCount = 1000000;
+const int iterationCount = 100;
 
 int main(void) {
 
+  initializeJumpTable();
   /* Random number code based on cppreference.com example. */
   std::vector<int> turnList;
   std::random_device rd;
@@ -65,20 +71,20 @@ int main(void) {
       ++steps;
       roll = 0;
       roll = dis(gen);
+      std::cout << "current: " << currLoc << std::endl;
+      std::cout << "roll: " << roll << std::endl;
       /* Must land on 100 exactly. */
-      if((currLoc + roll) > 100) {
-	continue;
-      } else if((currLoc + roll) == 100) {
+      if((currLoc == 100) || ((currLoc + roll) == 100)) {
 	break;
+      } else if((currLoc + roll) > 100) {
+	continue;
       } else {
 	currLoc += roll;
 	newLoc = 0;
-	try {
-	  newLoc = jumpTable.at(currLoc);
+	newLoc = jumpTable.at(currLoc);
+	if(newLoc != 0) {
+	  std::cout << "Hit in jumpTable: " << newLoc << std::endl;
 	  currLoc = newLoc;
-	} 
-	catch(...) {
-	  continue;
 	}
       } /* if */
     } /* for(;;) */
